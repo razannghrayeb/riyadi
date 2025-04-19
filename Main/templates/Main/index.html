@@ -1,0 +1,500 @@
+{% extends "Main/layout.html" %}
+{% load static %}
+
+{% block header %}
+<style>
+    body,
+    html {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .hidden {
+      opacity: 0;
+      filter: blur(5px);
+      transform: translateX(-100%);
+      transition: All 2s;
+    }
+
+    .hidden2{
+      opacity: 0;
+      filter: blur(5px);
+      transform: translateX(100%);
+      transition: All 2s;
+    }
+
+    .visible {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateX(0);
+    }
+
+
+
+    .header {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 40px;
+        color: #000;
+    }
+
+    .content {
+        display: flex;
+        margin: 0 auto;
+        padding: 50px;
+        max-width: 1500px;
+        color: #000;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .gradient-text {
+        color: transparent;
+        background-image: linear-gradient(to right, #ff0000,grey); /* Leipzig's colors */
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+
+    .carousel {
+        width: 60%;
+        position: relative;
+    }
+
+    .slides {
+        margin: 50px;
+        width: 80%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .slides img {
+        width: 100%;
+        display: none;
+        transition: transform 0.6s;
+    }
+
+    .slides img:hover {
+        transform: scale(1.05);
+    }
+
+    .text-block {
+        width: 40%;
+        text-align: center;
+    }
+
+    .text-block p {
+        margin: 0;
+        font-size: 24px;
+        width: 50%;
+    }
+
+    .Phrases {
+        margin-bottom: 50px;
+        padding-top: 10px;
+        font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .ExploreButton {
+        background-color: #ffffff; /* White */
+        color: #000; /* Black */
+        border: 2px solid #ff0000; /* Red */
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 30px;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: 0.6s;
+    }
+
+    .ExploreButton:hover {
+        color: #ffffff; 
+        background-color: #ff0000; 
+        cursor: pointer;
+    }
+
+    .upcoming-games {
+        margin-top: 140px;
+        padding: 10px;
+        background-color: #ffffff; 
+        color: #ff0000; 
+    }
+
+    #ticketsLink{
+      text-decoration: none;
+      color: transparent;
+      background-image: linear-gradient(to right, #ff0000,orange); 
+      -webkit-background-clip: text;
+      background-clip: text;
+      font-weight: bolder;
+      font-size: 2em;
+    }
+
+    .games {
+        display: flex;
+        white-space: nowrap;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 10px 0;
+        gap: 20px;
+    }
+
+    .card-game {
+        flex: 0 0 auto;
+        width: 300px;
+        height: auto;
+        margin-right: 15px;
+        background-color: #ffffff; 
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .card-img {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card h2 {
+        margin-top: 15px;
+        color: #000; 
+        font-size: 1.5em;
+    }
+
+    
+    .buy-ticket-btn {
+        text-decoration: none;
+        text-align: center;
+        margin-top: auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #ff0000; 
+        color: #ffffff; 
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+
+    .info {
+        margin-top: 10px;
+        display: flex;
+        font-size: smaller;
+        justify-content: space-between;
+    }
+
+    .info p {
+        color: #555;
+    }
+
+    .trophies {
+        margin-top: 100px;
+        text-align: center;
+    }
+
+    .header {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 40px;
+        color: #000; /* Black */
+    }
+
+    .card-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        width: 300px;
+        height: 400px;
+        perspective: 1000px;
+        background-color: #f9f9f9; /* Light Gray */
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    .card:hover .card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .card-front {
+        background: #ffffff; /* White */
+        color: #000; /* Black */
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        transform: rotateY(0deg);
+    }
+
+    .card-back {
+        color: white;
+        transform: rotateY(180deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        background: linear-gradient(to right, #ff0000,orange); 
+    }
+
+    .card img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+
+    .card h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: transparent;
+        background-image: linear-gradient(to right, #ff0000,grey); /* Leipzig's colors */
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+
+    .card p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .about-us {
+      padding: 80px 0;
+    }
+
+    .about-content h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .about-content p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+
+    .about-image img {
+      max-width: 100%;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Primary Button */
+    .btn-primary {
+        background-color: #007bff; /* Blue */
+        color: #fff; /* White */
+        border: none;
+    }
+
+    /* Button Hover Effect */
+    .btn:hover {
+        background-color: #0056b3; /* Darker Blue */
+        cursor: pointer;
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <div class="text-block">
+        <div class="Phrases">
+            <h1 class="gradient-text">RB Leipzig Since 2009</h1>
+        </div>
+        <button onclick="location.href='/shop'" class="ExploreButton">Explore</button>
+    </div>
+    <div class="carousel">
+        <div class="slides">
+            {% for new in News %}
+            <a href="{% url 'singleNews' new.id %}">
+                <img src="{{ new.Image }}" alt="Slide" />
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="upcoming-games hidden">
+    <h2 class="header" >Upcoming Games</h2>
+    <a href="{% url 'tickets' %}" class="hidden" id="ticketsLink">Click Here To Get Your Tickets Now!</a>
+    <div class="games">
+        {% for game in games %}
+        <div class="card-game hidden">
+            <img class="card-img" src="{{ game.thumbnail }}" alt="Thumbnail for {{ game.name }}" />
+            <h2 style="font-size: 1.4em; margin-top: 20px;">{{ game.name }}</h2>
+            <p style="font-size: 1.4em; font-weight: 700">${{ game.price|floatformat:2 }}</p>
+            <div class="info">
+                <p>{{ game.date|date:"D, d M Y H:i" }}</p>
+                <p>{{ game.location }}</p>
+            </div>
+            <a style="margin-top: 10px;" class="ExploreButton" href="{% url 'ticket_detail' game.id %}">Buy Tickets</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="trophies hidden">
+    <div class="header">Our Trophies</div>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="https://tmssl.akamaized.net/images/erfolge/medium/27.png?lm=1520606999"
+                        alt="Trophy Name" />
+                    <h3>German Cup</h3>
+                </div>
+                <div class="card-back">
+                    <p> This trophy was nailed by our club after beating Frankfurt in the German cup finals, Our star Werner scored the winning goal at the 90th min to make the score 3-2, What an amazing night it was at Berlin!</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="https://tmssl.akamaized.net/images/erfolge/medium/312.png?lm=1520606999"
+                        alt="Trophy Name" />
+                    <h3>German Super Cup</h3>
+                </div>
+                <div class="card-back">
+                    <p>German cup Super, a trophy best spoken about after beating the bendesliga holder Bayern Munich on penalties. 2022,A year never to be forgetten</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="https://tmssl.akamaized.net/images/erfolge/medium/699.png?lm=1647362865"
+                        alt="Trophy Name" />
+                    <h3>German Regionals</h3>
+                </div>
+                <div class="card-back">
+                    <p>One of our oldest trophies we got back in 2011, two years after initiating RB Leipzig,Our hard work back then  made us win with a 3-0 on Union Berlin.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="about-us" class="section about-us">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="about-content hidden">
+          <h2>About RB Leipzig</h2>
+          <p>Welcome to RB Leipzig's official website. We are a professional football club based in Leipzig, Germany. Founded in 2009, RB Leipzig has quickly risen to prominence in German football.</p>
+          <p>At RB Leipzig, we are committed to excellence both on and off the field. Our mission is to entertain and inspire fans through our exciting style of football while representing the city of Leipzig with pride.</p>
+          <p>Explore our website to learn more about our history, our players, and our vision for the future.</p>
+          <a href="" class="btn btn-primary">Meet Our Team</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-image hidden2">
+          <img src="static\Main\pics\leipzig_logo2.jpg" alt="RB Leipzig Logo">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+    let slideIndex = 0;
+    let phrases = ["RB Leipzig Since 2009", "Welcome to Our Store", "Explore Our Collection"]; // Array of phrases
+    carousel();
+
+    function plusSlides(n) {
+        slideIndex += n;
+        showSlides(slideIndex);
+        resetTimer();
+    }
+
+    function showSlides(n) {
+        let slides = document.getElementsByClassName("slides")[0].getElementsByTagName("img");
+        let phrasesDiv = document.querySelector(".Phrases h1"); // Selecting the phrases h1 for update
+        if (n >= slides.length) {
+            slideIndex = 0;
+        }
+        if (n < 0) {
+            slideIndex = slides.length - 1;
+        }
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex].style.display = "block";
+        phrasesDiv.textContent = phrases[slideIndex % phrases.length]; // Updating the phrase
+    }
+
+    function carousel() {
+        showSlides(slideIndex);
+        slideIndex++;
+        setTimeout(carousel, 3000); // Change image and phrase every 3 seconds
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = setTimeout(carousel, 3000);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+        }else{
+          entry.target.classList.remove('visible');
+        }
+      });
+    });
+
+    const hiddenElements = document.querySelectorAll('.hidden');
+    const hiddenAbout = document.querySelectorAll('.hidden2');
+    hiddenElements.forEach((el) => observer.observe(el));
+    hiddenAbout.forEach((el) => observer.observe(el));
+
+</script>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "Main/layout.html" %} {% load static %} {% block header %}
+<style>
+  .ticket-container {
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+    height: max-content;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    gap: 20px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .img-container {
+    width: 500px;
+    margin-bottom: 20px;
+  }
+
+  .img-container img {
+    width: 100%;
+    height: 100vh;
+    max-height: 50%;
+    border-radius: 8px; /* Optional: round corners of the image */
+  }
+  .ticket-info {
+    width: 100%;
+  }
+  .ticket-info h1 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dee2e6; /* Adds a subtle line under the title */
+  }
+  .ticket-info button {
+    text-decoration: none;
+    text-align: center;
+    margin-top: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #c44d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 50%;
+  }
+</style>
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %} {% block body %}
+<div class="ticket-container">
+  <div class="img-container">
+    <img src="{{ ticket.thumbnail }}" alt="Thumbnail for {{ ticket.name }}" />
+  </div>
+  <div class="ticket-info">
+    <h1>{{ ticket.name }}</h1>
+    <p>{{ ticket.date|date:"D, d M Y H:i" }}</p>
+    <p style="margin-bottom: 100px">{{ ticket.location }}</p>
+    <p style="font-size: larger; font-weight: 700">
+      ${{ ticket.price|floatformat:2 }}
+    </p>
+    <p>Tickets Sold: {{ ticket.tickets_sold }}</p>
+
+    {% if user_has_ticket %}
+    <p style="color: green">You have already purchased a ticket.</p>
+    {% elif ticket.total_tickets > ticket.tickets_sold %}
+    <form action="{% url 'ticket_detail' ticket_id=ticket.id %}" method="post">
+      {% csrf_token %}
+      <script
+        src="https://checkout.stripe.com/checkout.js"
+        class="stripe-button"
+        data-key="{{ stripe_public_key }}"
+        data-amount="{{ amount_in_cents }}"
+        data-name="Ticket Purchase"
+        data-description="Purchase a ticket for {{ ticket.name }}"
+        data-image="{{ ticket.thumbnail }}"
+        data-locale="auto"
+      ></script>
+    </form>
+    {% else %}
+    <p style="color: red">Sold Out</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

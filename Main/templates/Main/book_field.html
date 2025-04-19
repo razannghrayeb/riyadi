@@ -1,0 +1,182 @@
+{% extends "Main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.css' rel='stylesheet' />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #0056b3, #0078d4);
+            z-index: -1;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        header p {
+            margin: 10px 0 0;
+            font-size: 18px;
+        }
+        
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .book-header, .form-container, .booked {
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form label {
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .form input[type="date"],
+        .form input[type="time"],
+        .form input[type="submit"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #0056b3;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .form input[type="submit"] {
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form input[type="submit"]:hover {
+            background-color: #004494;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bookings-table th,
+        .bookings-table td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .bookings-table th {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .bookings-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .no-booking {
+            text-align: center;
+            font-style: italic;
+            color: #d00000;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Leipzig Team Booking System
+    </header>
+
+    <div class="content">
+        <div class="book-header">
+            <h2>Book {{ field.name }}</h2>
+        </div>
+        <div class="form-container">
+            <form method="post" class="form">
+                {% csrf_token %}
+                <label for="date">Date:</label>
+                <input type="date" name="date" required>
+                <label for="start_time">Start Time:</label>
+                <input type="time" name="start_time" required>
+                <label for="end_time">End Time:</label>
+                <input type="time" name="end_time" required>
+                <input type="submit" value="Book">
+            </form>
+        </div>
+        <div class="booked">
+            {% if books %}
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                            <tr>
+                                <td>{{ book.date }}</td>
+                                <td>{{ book.start_time|date:"H:i" }}</td>
+                                <td>{{ book.end_time|date:"H:i" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-booking">No bookings for this field.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+{% endblock %}

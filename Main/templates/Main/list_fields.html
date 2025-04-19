@@ -1,0 +1,234 @@
+{% extends "Main/layout.html" %}
+{% load static %}
+
+{% block body %}
+<head>
+    <style>
+       /* body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .stadium-title {
+            padding: 40px 20px;
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .stadium-title h2 {
+            font-size: 2.5em;
+            color: #ffffff;
+            margin: 0;
+            position: relative;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: revealTitle 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards, slideIn 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        @keyframes revealTitle {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: 300px;
+            margin: 20px;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
+        }
+
+        .image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-details {
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .card-details h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .card-details p {
+            color: #666;
+        }
+
+        .book-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background-color: #0056b3;
+            color: #fff;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .book-button:hover {
+            background-color: #004494;
+        } */
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .stadium-title {
+            padding: 40px 20px;
+            background: linear-gradient(to right, #dd013f 0%, #dd013f 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .stadium-title h2 {
+            font-size: 2.5em;
+            color: #ffffff;
+            margin: 0;
+            position: relative;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: revealTitle 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards, slideIn 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: calc(50% - 40px); /* Adjusts width to fit 2 cards per line, accounting for margin */
+            margin: 20px;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
+        }
+
+        .image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-details {
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .card-details h2, .card-details p {
+            color: #333;
+        }
+
+        .book-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background-color: #dd013f;
+            color: #fff;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .book-button:hover {
+            background-color: #004494;
+        }
+
+        @keyframes revealTitle {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: calc(100% - 40px); /* Full width on smaller screens */
+            }
+        }
+    </style>
+</head>
+<div class="stadium-title">
+    <h2>Available Stadiums</h2>
+</div>
+<body>
+    <div class="card-container">
+        {% for field in fields %}
+            <div class="card">
+                <img class="image" src="{{ field.image }}" alt="{{ field.name }}">
+                <div class="card-details">
+                    <h2>{{ field.name }}</h2>
+                    <p>Description: {{ field.description }}</p>
+                    <p>Price per hour: {{ field.price_per_hour }}</p>
+                    <a href="{% url 'book_field' field_id=field.id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}

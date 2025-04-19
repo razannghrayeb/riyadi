@@ -1,0 +1,277 @@
+{% extends "Main/layout.html" %} {% load static %} {% block body %}
+
+<div class="Phrases">
+  <h1>Since 2009</h1>
+</div>
+
+<div>
+  <div class="add-new-post">
+    <a href="{% url 'add_post' %}" style="color: black"
+      ><i
+        class="fa-solid fa-plus fa-2xl"
+        style="color: #dd013f; font-size: 50px;"
+      ></i
+      >Add A new Post</a
+    >
+  </div>
+</div>
+<hr />
+<div id="posts" style="margin-top: 40px"></div>
+
+<style>
+
+  body {
+    background-color: #f4f4f4;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.Phrases {
+    padding-top: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    color: #dd013f;
+}
+
+.add-new-post {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.add-new-post a {
+    color: #dd013f;
+    font-size: 18px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.add-new-post a:hover {
+    background-color: #dd013f;
+    color: white;
+    transform: translateY(-2px);
+}
+
+#posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    border: none;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.image--cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 16px;
+}
+
+.like-button {
+    color: #dd013f;
+    font-size: 24px;
+    border: none;
+    background-color: white;
+}
+
+.like-count {
+    font-size: 18px;
+}
+
+.like-container {
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .Phrases, .add-new-post a {
+        font-size: 20px;
+    }
+    #posts {
+        grid-template-columns: 1fr; /* Single column layout for mobile */
+    }
+}
+
+
+  
+</style>
+
+<script>
+  // Start with first post
+  let counter = 0;
+
+  // Load posts 10 at a time
+  const quantity = 10;
+
+  // When DOM loads, render the first 10 posts
+  document.addEventListener("DOMContentLoaded", load);
+
+  // If scrolled to bottom, load the next 10 posts
+  window.onscroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 5) {
+      load();
+    }
+  };
+
+  // Load next set of posts
+  function load() {
+    // Set start and end post numbers, and update counter
+    const start = counter;
+    const end = start + quantity - 1;
+    counter = end + 1;
+
+    // Get new posts and add posts
+    fetch(`/Community/posts?start=${start}&end=${end}`)
+      .then((response) => response.json())
+      .then((data) => {
+        data.posts.forEach(add_post);
+      });
+  }
+
+  // Add a new post with given contents to DOM
+  function add_post(contents) {
+    // Create new post
+    const post = document.createElement("div");
+    post.className = "post";
+    const postId = contents.id;
+    post.id = postId;
+    post.innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <img src="${contents.owner__image}" class="image--cover">
+                <h5 class="card-title">${contents.owner__username}</h5>
+                <hr>
+                <p class="card-text">${contents.caption}</p>
+                <p class="card-text"><small class="text-muted">Uploaded on: ${contents.date_uploaded}</small></p>
+                <hr>
+            </div>
+            <img class="card-img-bottom" src="${contents.image}" height=100% width=100% alt="Card image cap">
+            <div class="like-container">
+                <button class="like-button" onclick="handleLike(${contents.id})">
+                    <i id="post-${contents.id}-like-button" class="fa-solid fa-heart fa-2xl" style="font-size:50px;"></i>
+                </button>
+                <p class="like-count" id="post-${contents.id}-like-count">${contents.number_of_likes}</p>
+            </div>
+            
+        </div>
+    `;
+    localStorage.setItem(contents.id, contents.number_of_likes);
+    // Add post to DOM
+    document.querySelector("#posts").append(post);
+    updateLikeStatus(contents.id); // Update like status when adding post
+  }
+
+  // Function to handle like button click
+  function handleLike(postId) {
+    // Send AJAX request to Django view to toggle like status
+    fetch(`/Community/toggle_like/${postId}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"), // Include CSRF token
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        updateLikeStatus(postId); // Update like status after successful response
+      })
+      .catch((error) => {
+        console.error("Error toggling like status:", error);
+      });
+  }
+
+  // Function to update like status based on server response
+  function updateLikeStatus(postId) {
+    const likeCountElement = document.querySelector(
+      `#post-${postId}-like-count`
+    );
+
+    fetch(`/Community/has_liked_post/${postId}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        const btn = document.querySelector(`#post-${postId}-like-button`);
+        if (data.has_liked) {
+          btn.style.color = "#dd013f"; // Liked color
+          likeCountElement.textContent =
+            parseInt(likeCountElement.textContent) + 1;
+        } else {
+          btn.style.color = "grey";
+          likeCountElement.textContent =
+            parseInt(likeCountElement.textContent) - 1;
+          if (likeCountElement.textContent < 0) {
+            likeCountElement.textContent = 0;
+          }
+        }
+        return data.has_liked;
+      })
+      .catch((error) => {
+        console.error("Error checking user like status:", error);
+        return false;
+      });
+  }
+
+  // Function to get CSRF token
+  function getCookie(name) {
+    const cookieValue = document.cookie.match(
+      "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
+    );
+    return cookieValue ? cookieValue.pop() : "";
+  }
+
+  function reShufflePhrases() {
+    PHRASES = [
+      "#We_Are_Leipzig",
+      "#Die_Roten_Bullen",
+      "#Follow_RB_LEIPZIG!",
+      "Since 2009",
+    ];
+    const container = document.querySelector(".Phrases h1");
+    var index = 0;
+
+    return function () {
+      container.innerHTML = PHRASES[index];
+      index = (index + 1) % PHRASES.length;
+    };
+  }
+
+  var reshuffleInterval = setInterval(reShufflePhrases(), 2000);
+</script>
+{% endblock %}

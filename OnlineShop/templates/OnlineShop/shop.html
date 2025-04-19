@@ -1,0 +1,630 @@
+{% extends "Main/layout.html" %} {% load static %}
+{% block title %} Fan Shop {% endblock %}
+{% block header %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+        /* Banner styles */
+        #banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), black), url({% static 'pics\898551-rb-wallpaper-1920x1080-free-download.jpg' %});
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+
+        .banner-text {
+            text-align: center;
+            color: #fff;
+            padding-top: 180px;
+        }
+
+        .banner-text h1 {
+            font-size: 190px;
+            font-family: "kaushan script", cursive;
+        }
+
+        .banner-text p {
+            padding-top: 100px;
+            font-size: 50px;
+            font-style: italic;
+        }
+
+        .banner-btn {
+            margin: 70px auto 0;
+        }
+
+        .banner-btn a {
+            width: 15%;
+            font-size: 25px;
+            height: 70px;
+            text-decoration: none;
+            display: inline-block;
+            margin: auto;
+            padding: 12px 0;
+            color: #fff;
+            border: .5px solid #fff;
+            position: relative;
+            z-index: 1;
+            transition: color 0.5s;
+        }
+
+        .banner-btn a span {
+            width: 0;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff;
+            z-index: -1;
+            transition: 0.5s;
+        }
+
+        .banner-btn a:hover span {
+            width: 100%;
+        }
+
+        .banner-btn a:hover {
+            color: #000;
+        }
+
+        /* Title text styles */
+        .title-text {
+            
+            padding-top: 60px;
+            text-align: center;
+            padding-bottom: 70px;
+        }
+
+        .title-text p {
+            margin: auto;
+            font-size: 30px;
+            color: #D52B1E;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+        }
+
+        .title-text p::after {
+            content: '';
+            width: 50px;
+            height: 35px;
+            background: linear-gradient(#D52B1E, #fff);
+            position: absolute;
+            top: -20px;
+            left: 0;
+            z-index: -1;
+            transform: rotate(10deg);
+            border-top-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+        }
+
+        .title-text h1 {
+            font-size: 50px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 770px) {
+            .title-text h1 {
+                font-size: 35px;
+            }
+        }
+
+        
+
+        /* Product container styles */
+        #product-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px;
+            justify-content: space-around;
+        }
+
+        .product {
+            width: 300px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            padding: 20px;
+        }
+
+        .product-details h2 {
+            margin-top: 0;
+            color: black;
+        }
+
+        .price {
+            color: black;
+            font-weight: bold;
+        }
+
+        .category{
+          color: black;
+        }
+
+        /* Cart and search styles */
+        .cart {
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          font-size: 30px;
+          margin-top: 20px;
+          margin-bottom: 68px;
+        }
+        
+        #cart-items {
+          list-style-type: none;
+          padding: 20px;
+          margin: 20px;
+        }
+
+        #cart-items li {
+          margin-bottom: 10px;
+          padding: 10px;
+          border-bottom: 1px solid #ddd;
+        }
+        
+        
+        .cart p {
+          margin: 10px 0;
+          font-weight: bold;
+        }
+        
+
+        .search-container {
+          margin-bottom: 20px;
+          text-align: center;
+        }
+        
+        
+        .search-container input[type="text"] {
+          padding: 10px;
+          width: 300px;
+          border: 1px solid #DE023F;
+          border-radius: 5px;
+          font-size: 20px;
+          margin-right: 10px;
+        }
+        
+        .search-container button {
+          padding: 10px 20px;
+          background-color: #DE023F;
+          width: auto;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 20px;
+        }
+        
+        
+        .search-container button:hover {
+          background-color: black;
+        }
+
+
+        label {
+          display: block;
+          margin-bottom: 5px;
+          font-weight: bold;
+        }
+        
+        input[type="text"],
+        select {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          font-size: 16px;
+        }
+        label {
+          display: block;
+          margin-bottom: 8px;
+        }
+        
+        input {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 16px;
+          box-sizing: border-box;
+        }
+        
+       #product-container button{
+        padding: 10px;
+        margin 20px;
+        background-color: #DE023F;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 20px;
+       }
+        
+       #product-container button:hover{
+        background-color: black;
+       }
+      /*hello*/
+      #product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+        gap: 20px;  /* Adds space between each product section */
+    }
+    
+    .product {
+        flex-basis: 20%;  /* Adjust this percentage based on your layout needs */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s ease-in-out;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+    
+    .product:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    
+    .product img {
+        width: 100%;
+        display: block; /* Removes bottom space/gap */
+    }
+    
+    .product-details {
+        padding: 10px;
+        text-align: center;
+    }
+    
+    #product-container button {
+        padding: 10px 20px; /* Slightly larger padding for better touch targets */
+        margin: 5px;
+        background-color: #DE023F;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px; /* Adjusted for better readability */
+        transition: background-color 0.3s ease;
+    }
+    
+    #product-container button:hover {
+        background-color: black;
+    }
+    
+    /* Separate styles for add and remove buttons for more intuitive UI */
+    .button-add {
+        margin-right: 2px; /* Small gap between add and remove buttons */
+    }
+    
+    .button-remove {
+        margin-left: 2px;
+    }
+          
+        button {
+          width: auto;
+          padding: 10px;
+          background-color: #DE023F;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 20px;
+        }
+        
+        button:hover {
+          background-color: black;
+        }
+        
+
+
+#footer{
+  padding: 100px 0 20px;
+  background: #efefef;
+  position: relative;
+}
+
+.footer-row{
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}  
+
+.footer-left, .footer-right{
+  flex-basis: 45%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.footer-right{
+  text-align: right;
+}
+
+.footer-right h1{
+  margin-right: 20px !;
+}
+
+.footer-row h1{
+   margin: 20px 0;
+
+}
+
+.footer-row p{
+  line-height: 35px;  
+}
+
+.footer-left .far, .footer-right .fas{
+   font-size: 20px;
+   color: #DE023F;
+   margin: 10px;
+}
+
+.footer-img{
+  max-width: 370px;
+  opacity: 0.1;
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%,-50%);
+}
+
+.social-links{
+   text-align: center;
+}
+
+.social-links .fab{
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  line-height: 40px;
+  border: 1px solid #DE023F;
+  margin: 40px 5px 0;
+  color: #DE023F;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.social-links .fab:hover{
+  background: #DE023F;
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.social-links p{
+  font-size: 12px;
+  margin-top: 20px;
+  color: #DE023F;
+}
+
+@media screen and (max-width: 770px){
+
+  .footer-left , .footer-right{
+     flex-basis: 100%;
+     font-size: 14px;    
+  }
+
+  .footer-img{
+    top: 25% !important;
+  }
+
+}
+.action-btn {
+  width: auto;
+  padding: 14px;
+  margin: 20px; /* Ensures there is space around the buttons */
+  background-color: #DE023F; 
+  color: white;
+  border: none;
+  border-radius: 5px; /* Rounded corners but not fully circular */
+  cursor: pointer;
+  font-size: 30px; /* Slightly smaller font for less aggressive action buttons */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+}
+
+.action-btn:hover {
+  background-color: black; /* A slightly darker shade of blue for hover */
+  transform: scale(1.05); /* Slight enlargement on hover */
+}
+
+.button-container{
+  margin-left: 45%;
+
+}
+
+    </style>
+{% endblock %}
+{% block body %}
+    <header>
+      <section id="banner">
+        <div class="banner-text">
+            <h1>Leipzig's Online Shop</h1>
+            <p>Explore Our Grooming Collections</p>
+            <div class="banner-btn">
+                <a href="#product-container" id="scroll-to-contact"><span></span>Our Collections</a>
+            </div>
+        </div>
+    </section>
+
+  
+
+    </header>
+
+ 
+      <div class="title-text">
+        <p>Welcome To Our Shop</p>
+        <h1>What to purchase?</h1>
+      </div>  
+
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search products...">
+        <button onclick="searchProducts()">Search</button>
+      </div>
+
+      <div class="cart">
+        <h2>Shopping Cart</h2>
+        <ul id="cart-items"></ul>
+        <p>Total: <span id="total-price">$0.00</span></p>
+        <p>Budget: <span id="budget">$0.00</span></p> <!-- This is where the budget will be displayed -->
+        <p>Remaining Budget: <span id="remaining-budget">$0.00</span></p> <!-- This will show remaining budget -->
+        <p>Set Budget: <input type="number" id="budget-input" step="0.01" placeholder="Enter your budget"></p>
+        <button id="btn11" onclick="setBudget()">Set Budget</button>
+      </div>  
+
+     <div id="product-container">
+      {% for product in products %}
+        <section class="product">
+          {% if product.image_url %}
+          <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        {% else %}
+          <!-- Display a placeholder or some alternative content -->
+          <img src="{% static 'path/to/default-image.jpg' %}" alt="No image available">
+        {% endif %}
+          <div class="product-details">
+            <h2>{{ product.name }}</h2>
+            <p class="price">${{ product.price }}</p>
+            <p class="category">Category: {{ product.category }}</p>
+            <button onclick="addToCart(this)" data-name="{{ product.name }}" data-price="{{ product.price }}">+</button>
+            <button onclick="removeFromCart(this)" data-name="{{ product.name }}">-</button>
+          </div>
+        </section>
+      {% endfor %}
+      </div>
+      <div class="button-container">
+        <button class="action-btn" onclick="checkout()">Checkout</button>
+    </div>
+    
+
+
+    <script>
+      let cartItems = [];
+      let total = 0;
+      let budget = 0;
+      
+      function setBudget() {
+          const budgetInput = document.getElementById("budget-input").value;
+          if (!budgetInput) {
+              alert("Please enter a valid budget amount.");
+              return;
+          }
+          budget = parseFloat(budgetInput);
+          document.getElementById("budget").textContent = `$${budget.toFixed(2)}`; // Display budget
+          document.getElementById("remaining-budget").textContent = `$${budget.toFixed(2)}`; 
+          document.getElementById("budget-input").value = "";
+          alert("Budget set successfully!"); 
+      }
+          
+      function addToCart(button) {
+        var itemName = button.getAttribute('data-name');
+        var itemPrice = parseFloat(button.getAttribute('data-price'));
+        if (total + itemPrice > budget) {
+            alert("Exceeds budget limit!");
+            return;
+        }
+      
+        cartItems.push({ name: itemName, price: itemPrice });
+        total += itemPrice;
+        updateCart();
+    }
+    
+    function removeFromCart(button) {
+      const itemName = button.getAttribute('data-name');
+      for (let i = 0; i < cartItems.length; i++) {
+        if (cartItems[i].name === itemName) {
+          // Adjust the total since we're removing this item
+          total -= cartItems[i].price;
+          cartItems.splice(i, 1);
+          break; // Stop the loop after finding the item
+        }
+      }
+      updateCart();
+    }  
+
+  
+  
+  function updateCart() {
+      const cartList = document.getElementById("cart-items");
+      const totalPrice = document.getElementById("total-price");
+  
+      cartList.innerHTML = "";
+      cartItems.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name}: $${item.price}`;
+          cartList.appendChild(li);
+      });
+  
+      totalPrice.textContent = `$${total.toFixed(2)}`;
+  
+      // Update remaining budget
+      const remainingBudget = budget - total;
+      document.getElementById("remaining-budget").textContent = `$${remainingBudget.toFixed(2)}`;
+  }
+  
+  function checkout() {
+      alert(`Thank you for your purchase! Total amount: $${total.toFixed(2)}`);
+      cartItems = [];
+      budget -= total; 
+      document.getElementById("budget").textContent = `$${budget.toFixed(2)}`; 
+      total=0;
+      updateCart();
+      
+  }
+  
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Smooth scrolling when clicking the "Find Out" link
+    document.getElementById("scroll-to-contact").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.querySelector("#product-container").scrollIntoView({
+            behavior: "smooth"
+        });
+    });
+  });
+
+  function searchProducts() {
+    const searchQuery = document.getElementById("search-input").value.toLowerCase();
+    const productSections = document.querySelectorAll(".product");
+
+    productSections.forEach(section => {
+      const productName = section.querySelector("h2").textContent.toLowerCase();
+      if (productName.includes(searchQuery)) {
+        // If the product name includes the search query, display the section
+        section.style.display = "block";
+      } else {
+        // Otherwise, hide the section
+        section.style.display = "none";
+      }
+    });
+  }
+    </script>
+{% endblock %}

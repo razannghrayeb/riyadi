@@ -1,0 +1,122 @@
+{% extends 'Main/layout.html' %} {% block body %}
+<style>
+  .profile-content {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  .current-profile-pic img,
+  .image-preview img {
+    border-radius: 50%;
+    border: 2px solid #0066cc;
+    width: 100px; /* match the size of the current profile pic */
+    height: 100px;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-weight: bold;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button.btn {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+    margin-left: 10px;
+  }
+</style>
+
+<div class="profile-content">
+  <h1>Update My Profile</h1>
+
+  <!-- Current profile picture display -->
+  <div class="current-profile-pic">
+    <h6>Current Profile Pic</h6>
+    <img src="{{ user.image }}" alt="Profile Pic" width="100" height="100" />
+  </div>
+
+  <!-- Profile update form -->
+  <form method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        value="{{ user.username }}"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="{{ user.email }}"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="image">Image:</label>
+      <input
+        type="file"
+        id="image"
+        name="image"
+        accept="image/*"
+        onchange="previewImage();"
+      />
+      <!-- Image preview area -->
+      <div class="image-preview">
+        <img id="imagePreview" src="#" alt="Your Image" style="display: none" />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+  </form>
+</div>
+
+<script>
+  function previewImage() {
+    var file = document.getElementById("image").files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      var imgElement = document.getElementById("imagePreview");
+      imgElement.src = e.target.result;
+      imgElement.style.display = "block";
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "Main/layout.html" %} {% load static %} {% block header %}
+<style>
+  /* Base styles */
+
+  .hidden {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(100%);
+    transition: all 2s;
+  }
+
+  body {
+    text-align: center;
+    font-size: 1.3em; /* Base font size */
+  }
+
+  .visible {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+
+  .ticket-shop-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    padding: 15px; /* 50px */
+    margin-top: 10px; /* 100px */
+    gap: 1.5625em; /* 25px */
+    justify-content: center;
+  }
+
+  .card {
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    height: auto;
+    margin-right: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .card:hover {
+    box-shadow: 0.1875em 0.5625em 0.5625em rgba(0, 0, 0, 0.6); /* 3px 9px 9px */
+    transition: all 0.3s;
+    transform: translateY(-0.625em); /* -10px */
+    border-radius: 0.5em; /* 8px */
+  }
+
+  .card-img {
+    width: 100%;
+    border-radius: 0.5em 0.5em 0 0; /* 8px 8px 0 0 */
+  }
+
+  .card h2 {
+    margin-top: 0.9375em; /* 15px */
+    color: #333;
+    font-size: 1.2em; /* 1.2em */
+  }
+
+  .card p {
+    color: #555;
+    margin: 0.3125em 0; /* 5px 0 */
+  }
+
+  .buy-ticket-btn {
+    text-decoration: none;
+    text-align: center;
+    margin-top: auto;
+    padding: 0.625em 1.25em; /* 10px 20px */
+    font-size: 1em; /* 16px */
+    background-color: #c44d4d;
+    color: white;
+    border: none;
+    border-radius: 0.25em; /* 4px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+
+  .buy-ticket-btn:hover {
+    background-color: #a63a3a;
+  }
+
+  .info {
+    margin-top: 0.625em; /* 10px */
+    display: flex;
+    font-size: smaller;
+    justify-content: space-between;
+  }
+
+  .info p {
+    color: #555;
+  }
+
+  /* Responsive adjustments */
+
+  @media screen and (max-width: 768px) {
+    body {
+      font-size: 1.1em; /* Reduce base font size for smaller screens */
+    }
+
+    .ticket-shop-container {
+      padding: 1.875em; /* 30px */
+      margin-top: 3.125em; /* 50px */
+      gap: 0.9375em; /* 15px */
+    }
+
+    .card {
+      width: calc(50% - 0.625em); /* 20px */
+      height: auto;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    body {
+      font-size: 1em; /* Further reduce base font size for even smaller screens */
+    }
+
+    .card {
+      width: calc(100% - 0.625em); /* 20px */
+    }
+  }
+</style>
+{% endblock %} {% block body %}
+<center><h1>RB Leipzig Ticket Shop</h1></center>
+<div class="ticket-shop-container">
+  {% for game in games %}
+  <div class="card hidden">
+    <img
+      class="card-img"
+      src="{{ game.thumbnail }}"
+      alt="Thumbnail for {{ game.name }}"
+    />
+    <h2>{{ game.name }}</h2>
+    <p>${{ game.price|floatformat:2 }}</p>
+    <div class="info">
+      <p>{{ game.date|date:"D, d M Y H:i" }}</p>
+      <p>{{ game.location }}</p>
+    </div>
+    <a class="buy-ticket-btn" href="{% url 'ticket_detail' game.id %}"
+      >Buy Tickets</a
+    >
+  </div>
+  {% endfor %}
+</div>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      } else {
+        entry.target.classList.remove("visible");
+      }
+    });
+  });
+
+  const hiddenElements = document.querySelectorAll(".hidden");
+  hiddenElements.forEach((el) => observer.observe(el));
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+.HorScroll {
+  height: 500px;
+  display: flex;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.HorScroll::before {
+  top: 0;
+  width: 120px;
+  height: 500px;
+  content: "";
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0), white);
+}
+
+.HorScroll:hover .item {
+  animation-play-state: paused;
+}
+
+.HorScroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.HorScroll .item {
+  min-width: 700px;
+  height: 500px;
+  text-align: center;
+  background-color: white;
+  margin-right: 4px;
+  position: relative;
+  animation: scrollAnimation 30s linear infinite;
+}
+
+.img__text {
+  position: absolute;
+  top: 0;
+  color: white;
+  padding-left: 50px;
+}
+
+.img__text h4 {
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 90px;
+  padding-left: 40px;
+}
+
+.NewsTitle {
+  width: auto;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 800px) {
+  .Phrases {
+    display: none;
+  }
+}

@@ -1,0 +1,44 @@
+{% extends "Main/layout.html" %} {% block body %}
+
+<h2
+  style="
+    font-family: fantasy;
+    color: #dd013f;
+    font-size: 50px;
+    margin-bottom: 70px;
+  "
+>
+  Create a new Post:
+</h2>
+
+<form action="{% url 'add_post' %}" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Caption:</label>
+    <input
+      type="text"
+      class="form-control"
+      id="exampleFormControlInput1"
+      name="caption"
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Image URL:</label>
+    <input
+      type="text"
+      class="form-control"
+      id="exampleFormControlInput1"
+      name="image"
+      placeholder="Enter URL"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-4 w-100 btn-lg btn-block">
+    Share Now
+  </button>
+</form>
+<style></style>
+
+{% endblock %}

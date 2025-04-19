@@ -1,0 +1,48 @@
+{% extends "Main/layout.html" %} {% load static %}
+
+<!-- this is ofc not final we need to make it in blog format like here: https://medium.com/towards-data-science/the-math-behind-convolutional-neural-networks-6aed775df076-->
+{% block body %}
+<h1>{{News.title}}:</h1>
+
+<hr  class = "linebreaker">
+<div style="height: 40%; width: 100%; margin-top: 50px;">
+    <img src="{{News.Image}}" alt="My image" height="100%" width="100%">
+</div>
+
+<div class="news-content">
+    <p>{{News.content}}</p>
+
+</div>
+<hr  class = "linebreaker">
+<div class="date-uploaded">
+
+    <span>Uploaded on {{News.date_uploaded}}</span>
+
+</div>
+
+<style>
+    .news-content{
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: 200;
+        text-align: left;
+        padding-left: 30px;
+        margin-top: 50px;
+        font-size: 22px;
+    }
+    .date-uploaded{
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bolder;
+        font-style: italic;
+        text-align: center;
+        font-size: 18px;
+        margin-top: 40px;
+    }
+    .linebreaker{
+        color: grey; 
+        height: 3px; 
+        border: none; 
+        background-color: grey;
+    }
+</style>
+
+{% endblock %}

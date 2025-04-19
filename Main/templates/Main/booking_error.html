@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Error</title>
+</head>
+<body>
+    <script>
+        alert("{{ error_message }}");
+        // Redirect to the booking page
+        window.location.href = '/book/{{ field.id }}/';
+    </script>
+</body>
+</html>

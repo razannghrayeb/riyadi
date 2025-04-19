@@ -1,0 +1,232 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %} Home {% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="{% static 'Main/style1.css' %}" />
+    <link rel="stylesheet" href="{% static 'Main/styleIndex.css' %}" />
+    <script src="{% static 'Main/inbox1.js' %}"></script>
+    <script
+      src="https://kit.fontawesome.com/7ea2b87826.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta
+      name="google-signin-client_id"
+      content="AIzaSyAo0SppBNAeLAH0ZoNB9SSnTc1kFrXLjb4"
+    />
+
+    {% block header %}
+    <style>
+      body .footer {
+        position: relative;
+        width: 100%;
+        bottom: 0;
+        margin-left: 5%;
+        background: linear-gradient(135deg, #dd013f 0%, #87012f 100%);
+        padding: 2rem 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #ffffff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .footer .social_icon li a,
+      .footer .menu li a {
+        font-size: 1rem;
+        color: #ffffff;
+        margin: 0 20px;
+        display: inline-block;
+        transition: all 0.3s ease-out;
+        text-decoration: none;
+        opacity: 0.9;
+        padding: 0.5rem;
+        border-radius: 5px;
+      }
+
+      .footer .social_icon li a:hover,
+      .footer .menu li a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        opacity: 1;
+      }
+
+      .footer p {
+        text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+
+      /* For tablets and medium-sized screens */
+      @media (max-width: 768px) {
+        .footer {
+          padding: 1.5rem 3%;
+        }
+
+        .footer .social_icon li a,
+        .footer .menu li a {
+          font-size: 0.8rem;
+          margin: 0 10px;
+          padding: 0.4rem;
+        }
+
+        .footer p {
+          font-size: 1rem;
+          margin-top: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+      }
+
+      /* For mobile devices */
+      @media (max-width: 480px) {
+        .footer {
+          padding: 1rem 2%;
+        }
+
+        .footer .social_icon li a,
+        .footer .menu li a {
+          font-size: 0.7rem;
+          margin: 0 8px;
+          padding: 0.3rem;
+        }
+
+        .footer p {
+          font-size: 0.9rem;
+          margin-top: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .footer .social_icon,
+        .footer .menu {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .footer .social_icon li,
+        .footer .menu li {
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .SideNavbar {
+          width: 200px; /* Slightly smaller width */
+        }
+        .SideNavbar a {
+          font-size: 20px; /* Slightly smaller font size */
+          padding: 10px 10px;
+        }
+      }
+
+      /* Adjust navbar for small screens */
+      @media (max-width: 768px) {
+        .SideNavbar {
+          width: 150px; /* Further reduce width */
+        }
+        .SideNavbar a {
+          font-size: 18px; /* Reduce font size */
+          padding: 8px 8px;
+        }
+      }
+    </style>
+    {% endblock %}
+  </head>
+
+  <body>
+    <main>{% block body %} {% endblock %}</main>
+
+    <div class="TopNavBar" style="display: none">
+      <!-- I just added this as an empty tag if anyone of you has some ideas to another navbar feel free to add-->
+    </div>
+    <div class="SideNavbar">
+      <!--Here we should add js code to make pressing each anchor tag responsive e.g if someone hoovers over Follow us they should see a mini pop up showing social media accounts-->
+      <a href="{% url 'index' %}" class="active" id="LeipzigFocus">
+        <img
+          src="https://rp-online.de/imgs/32/6/4/8/1/5/2/9/9/tok_6875eade4dcdf0722a40c267dcaf4c8a/w1772_h1486_x886_y743_RB_Leipzig-a98841e8ba1bcab0.jpg"
+          alt="Home"
+          width="100"
+          height="100"
+        />
+      </a>
+
+      <hr class="navbarSeparator" />
+      <a href="{% url 'news_All' %}">News</a>
+      <hr class="navbarSeparator" />
+      <a href="{% url 'OurTeam' %}">Our Team</a>
+      <hr class="navbarSeparator" />
+      <a href="{% url 'tickets' %}">Ticket Shop</a>
+      <hr class="navbarSeparator" />
+      <a href="{% url 'list_fields' %}">Book Stadiums</a>
+      <hr class="navbarSeparator" />
+      <a href="{% url 'Community_index' %}">Join our Community</a>
+      <hr class="navbarSeparator" />
+      {% if user.is_authenticated %}
+
+      <a href="{% url 'myProfile' user.id %}">My Profile</a>
+      {% else %}
+
+      <a href="{% url 'login' %}">Login/Register</a>
+
+      {% endif %}
+      <hr class="navbarSeparator" />
+      <a href="{% url 'Shop_Main' %}">
+        <img
+          src="https://th.bing.com/th/id/R.1a98212a809150a1700ea5490db48e17?rik=RpOu%2bnpVmPvIIQ&riu=http%3a%2f%2fwww.footballkitnews.com%2fwp-content%2fuploads%2f2017%2f07%2fBack-of-Leipzig-Shirt-17-18.png&ehk=CypUWPGmdmwPeQ3Ac%2f7oltvxJ8ixf7QMR%2fuS%2ftK%2frgQ%3d&risl=&pid=ImgRaw&r=0"
+          alt="Fan Shop"
+          width="100"
+          height="100"
+        />
+        <br />
+        Check Our Shop!
+      </a>
+    </div>
+
+    <div style="margin-bottom: 12%"></div>
+
+    <footer style="display: flex; font-size: 2em" class="footer">
+      <ul style="display: flex; list-style: none" class="social_icon">
+        <li>
+          <a href="https://www.facebook.com/rbleipzig/" target="_blank"
+            ><i class="fa-brands fa-facebook fa-2xl"></i
+          ></a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/rbleipzig/" target="_blank"
+            ><i class="fa-brands fa-instagram fa-2xl"></i
+          ></a>
+        </li>
+        <li>
+          <a href="https://twitter.com/RBLeipzig_EN" target="_blank"
+            ><i class="fa-brands fa-twitter fa-2xl"></i
+          ></a>
+        </li>
+      </ul>
+
+      <ul style="display: flex; list-style: none" class="menu">
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'index' %}#about-us">About</a></li>
+        <li><a href="{% url 'OurTeam' %}">Team</a></li>
+        <li><a href="mailto:Leipzig.RB009@proton.me">Contact us</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>
